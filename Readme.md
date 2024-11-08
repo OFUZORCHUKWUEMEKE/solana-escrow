@@ -20,17 +20,16 @@ Once these conditions are met, the user who created the escrow can withdraw the 
    - `deposit_sol`: Create Escrow and Deposit SOL into the escrow account.
    - `withdraw_sol`: Withdraw the deposited SOL from an escrow account if the conditions are met.
 
-Here's an example of how to use the `create_escrow` instruction:
+Here's an example of how to use the `deposit_sol handler` instruction:
 
 ```rust
-let ctx = CpiContext::new(
-    program_id,
-    CreateEscrow {
-        escrow_account: escrow_account.into(),
-        owner: owner_account.into(),
-        payer: payer_account.into(),
-        system_program: system_program.into(),
-    },
-);
+let cpi_ctx = CpiContext::new(
+        ctx.accounts.system_program.to_account_info(),
+        system_program::Transfer{
+            from:ctx.accounts.user.to_account_info(),
+            to:ctx.accounts.excrow_account.to_account_info()
+        },
+    );
+    system_program::transfer(cpi_ctx,escrow_amount)?;
 
 deposit(ctx, 50.0, 86400)?; // Create an escrow with a $50 target price and 1 day duration
