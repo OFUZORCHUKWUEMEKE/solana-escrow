@@ -6,11 +6,11 @@ declare_id!("8abobQGPEbz2RfwhhoDbfCHZQXtvTMQ4JbrKfUmyjq57");
 pub mod escrow {
     use super::*;
 
-    pub fn deposit(ctx:Context<Deposit>,escrow_amt:u64,unlock_price:f64)->Result<()>{
+    pub fn deposit_sol(ctx:Context<Deposit>,escrow_amt:u64,unlock_price:f64)->Result<()>{
        deposit_handler(ctx,escrow_amt,unlock_price)
     }
 
-    pub fn withdraw(ctx: Context<Withdraw>) -> Result<()> {
+    pub fn withdraw_sol(ctx: Context<Withdraw>) -> Result<()> {
         withdraw_handler(ctx)
     }
 }
