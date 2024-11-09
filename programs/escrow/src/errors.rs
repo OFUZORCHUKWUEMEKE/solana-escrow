@@ -11,4 +11,6 @@ pub enum EscrowErrorCode{
     ConfidenceIntervalExceeded,
     #[msg("current SOL price is not above Escrow unlock price.")]
     SolPriceAboveUnlockprice
+    #[msg("Price Overflow")]
+    PriceOverFlow
 }

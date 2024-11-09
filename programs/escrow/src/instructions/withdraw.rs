@@ -23,16 +23,23 @@ pub struct Withdraw<'info>{
 }
 
 pub fn withdraw_handler(ctx:Context<Withdraw>)->Result<()>{
-    let price_update = &mut ctx.accounts.price_update;
+    // Get accounts
+    let escrow_state = &ctx.accounts.escrow_account;
+    let price_update = &ctx.accounts.price_update;
      // get_price_no_older_than will fail if the price update is more than 30 seconds old
-     let maximum_age: u64 = 30;
+    let maximum_age: u64 = 30;
 
     // get_price_no_older_than will fail if the price update is for a different price feed.
     // This string is the id of the SOL/USD feed. See https://pyth.network/developers/price-feed-ids for all available IDs.
+
     let feed_id: [u8; 32] = get_feed_id_from_hex(SOL_USDC_FEED)?;
     let price = price_update.get_price_no_older_than(&Clock::get()?, maximum_age, &feed_id)?;
 
-    if price < escrow_state.unlock_price as u64{
+    let current_price = price_feed.price
+    .checked_mul(10_i64.pow(price_feed.exponent.unsigned_abs()))
+    .ok_or(EscrowErrorCode::PriceOverFlow)?;
+
+    if current_price < escrow_state.unlock_price as u64{
        return Err(EscrowErrorCode::SolPriceAboveUnlockPrice.into())
     }
     let cpi_ctx = CpiContext::new(
@@ -44,6 +51,5 @@ pub fn withdraw_handler(ctx:Context<Withdraw>)->Result<()>{
     );
     system_program::transfer(cpi_ctx,escrow_amount)?;
 
-    msg!("The price is ({} ± {}) * 10^{}", price.price, price.conf, price.exponent);
     Ok(())
 }
