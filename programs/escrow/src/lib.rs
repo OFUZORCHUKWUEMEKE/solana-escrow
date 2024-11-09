@@ -15,6 +15,3 @@ pub mod escrow {
         withdraw_handler(ctx)
     }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
