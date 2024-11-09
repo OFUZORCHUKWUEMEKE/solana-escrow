@@ -3,7 +3,7 @@ use crate::errors::*;
 use std::str::FromStr;
 use anchor_lang::prelude::*;
 use pyth_solana_receiver_sdk::price_update::{ get_feed_id_from_hex,
-    PriceUpdateV2,};
+    PriceUpdateV2};
 use anchor_lang::solana_program::clock::Clock;
 
 #[derive(Accounts)]
@@ -14,7 +14,7 @@ pub struct Withdraw<'info>{
     // escrow_account
     #[account(
         mut,
-        seeds=[b"MICHEAL BURRY", user.key().as_ref()],
+        seeds=[b"escrow", user.key().as_ref()],
         bump,
         close=user
     )]

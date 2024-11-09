@@ -21,6 +21,7 @@ pub fn deposit_handler(ctx:Context<Deposit>,escrow_amount:u64,unlock_price:f64)-
     Ok(())
 }
 
+
 #[derive(Accounts)]
 pub struct Deposit<'info>{
     // user account
@@ -29,7 +30,7 @@ pub struct Deposit<'info>{
     // account to store SOL in escrow
     #[account(
         init,
-        seeds=[b"MICHEAL BURRY",user.key().as_ref()],
+        seeds=[b"escrow",user.key().as_ref()],
         bump,
         payer=user,
         space=EscrowState::INIT_SPACE
